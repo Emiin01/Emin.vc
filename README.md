@@ -1,0 +1,61 @@
+import { FaInstagram, FaTwitter, FaTelegram } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+
+export default function EminVC() {
+  const [btcPrice, setBtcPrice] = useState(null);
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+        const data = await res.json();
+        setBtcPrice(data.bitcoin.usd);
+      } catch (err) {
+        console.error('Error fetching BTC price:', err);
+      }
+    };
+
+    fetchPrice();
+    const interval = setInterval(fetchPrice, 60000); // update every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black text-white font-sans flex flex-col items-center justify-center p-6">
+      <div className="text-center max-w-2xl">
+        <h1 className="text-4xl sm:text-6xl font-bold mb-4">Emin Turus</h1>
+        <p className="text-lg sm:text-xl mb-8">
+          Trader · Investor · Blockchain Developer · On-Chain Enthusiast · Airdrop Hunter
+        </p>
+
+        <p className="text-md sm:text-lg text-gray-400 mb-10 leading-relaxed">
+          I’m Emin, 24 years old – Trader, Investor, and On-Chain Enthusiast.<br />
+          My work focuses on macroeconomic trends and their impact on financial markets.<br />
+          As a Blockchain Developer and Airdrop Hunter, I navigate the depths of Web3 daily.<br />
+          I believe in data-driven decisions, perfect timing, and long-term vision.<br />
+          Welcome to my digital business card.
+        </p>
+
+        {/* Placeholder for future image */}
+        <div className="w-40 h-40 rounded-full bg-gray-800 mx-auto mb-10" />
+
+        {/* Live BTC price */}
+        <div className="text-lg text-green-400 mb-8">
+          {btcPrice ? `Live BTC Price: $${btcPrice.toLocaleString()}` : 'Loading BTC price...'}
+        </div>
+
+        <div className="flex justify-center space-x-6 text-2xl">
+          <a href="https://www.instagram.com/emiintrs" target="_blank" rel="noopener noreferrer">
+            <FaInstagram className="hover:text-pink-500 transition duration-300" />
+          </a>
+          <a href="https://x.com/DefiZenith" target="_blank" rel="noopener noreferrer">
+            <FaTwitter className="hover:text-blue-400 transition duration-300" />
+          </a>
+          <a href="https://web.telegram.org/k/#@ZenithDefi" target="_blank" rel="noopener noreferrer">
+            <FaTelegram className="hover:text-blue-300 transition duration-300" />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
